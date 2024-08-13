@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "715913465217",
+    "project_id": "twitterclonetute-5dfc6",
+    "storage_bucket": "twitterclonetute-5dfc6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715913465217:android:f73d3744bc1b2813896c80",
+        "android_client_info": {
+          "package_name": "app.genti.twitterclonetute"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3EDiT0zHzmsy1KJIql7wqvUSzFD0Znic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715913465217:android:4b1672015bf0c97f896c80",
+        "android_client_info": {
+          "package_name": "com.example.twitter_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3EDiT0zHzmsy1KJIql7wqvUSzFD0Znic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
