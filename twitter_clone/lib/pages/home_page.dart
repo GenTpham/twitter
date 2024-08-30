@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/components/my_drawer.dart';
 import 'package:twitter_clone/components/my_input_alert_box.dart';
+import 'package:twitter_clone/components/my_post_tile.dart';
+import 'package:twitter_clone/helper/navigate_pages.dart';
 import 'package:twitter_clone/services/database/database_provider.dart';
 
 import '../models/post.dart';
@@ -106,20 +108,10 @@ class _HomePageState extends State<HomePage> {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               final post = posts[index];
-              return Card(
-                margin: EdgeInsets.all(8),
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(post.name,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 8),
-                      Text(post.message),
-                    ],
-                  ),
-                ),
+              return MyPostTile(
+                post: post,
+                onUserTap: () => goUserPage(context, post.uid),
+                onPostTap: () => goPostPage(context, post),
               );
             },
           );

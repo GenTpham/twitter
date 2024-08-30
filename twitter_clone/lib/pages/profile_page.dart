@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/components/my_bio_box.dart';
 import 'package:twitter_clone/components/my_input_alert_box.dart';
+import 'package:twitter_clone/components/my_post_tile.dart';
 import 'package:twitter_clone/models/user.dart';
 import 'package:twitter_clone/services/auth/auth_service.dart';
 import 'package:twitter_clone/services/database/database_provider.dart';
+
+import '../helper/navigate_pages.dart';
 
 /*
 
@@ -28,6 +31,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   // providers
+  late final listeningProvider = Provider.of<DatabaseProvider>(context);
   late final databaseProvier =
       Provider.of<DatabaseProvider>(context, listen: false);
 
@@ -96,6 +100,9 @@ class _ProfilePageState extends State<ProfilePage> {
   // BUILD UI
   @override
   Widget build(BuildContext context) {
+    // get user posts
+    final allUserPosts = listeningProvider.filterUserPosts(widget.uid);
+
     // SCAFFOLD
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -106,46 +113,46 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
 
       // Body
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: ListView(
-          children: [
-            // user name handle
-            Center(
-              child: Text(
-                _isLoading ? '' : '@${user!.username}',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+      body: ListView(
+        children: [
+          // user name handle
+          Center(
+            child: Text(
+              _isLoading ? '' : '@${user!.username}',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
+          ),
 
-            const SizedBox(height: 25),
+          const SizedBox(height: 25),
 
-            // profile picture
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                padding: EdgeInsets.all(25),
-                child: Icon(
-                  Icons.person,
-                  size: 72,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+          // profile picture
+          Center(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              padding: EdgeInsets.all(25),
+              child: Icon(
+                Icons.person,
+                size: 72,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
+          ),
 
-            const SizedBox(height: 25),
+          const SizedBox(height: 25),
 
-            // profile stats -> number of posts / followers / following
+          // profile stats -> number of posts / followers / following
 
-            // follow / unfollow button
+          // follow / unfollow button
 
-            // edit bio
-            Row(
+          // edit bio
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -162,16 +169,51 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
+          ),
 
-            const SizedBox(
-              height: 10,
+          const SizedBox(
+            height: 10,
+          ),
+
+          // bio box
+          MyBioBox(text: _isLoading ? '...' : user!.bio),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 25, top: 20),
+            child: Text(
+              "Posts",
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
+          ),
 
-            // bio box
-            MyBioBox(text: _isLoading ? '...' : user!.bio),
-            // list of posts from user
-          ],
-        ),
+          // list of posts from user
+          allUserPosts.isEmpty
+              ?
+
+              // user post is empty
+              const Center(
+                  child: Text("No posts yet.."),
+                )
+              :
+
+              // user post is NOT empty
+              ListView.builder(
+                  itemCount: allUserPosts.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    // get individual post
+                    final post = allUserPosts[index];
+
+                    // post tile ui
+                    return MyPostTile(
+                      post: post,
+                      onUserTap: () {},
+                      onPostTap: () => goPostPage(context, post),
+                    );
+                  },
+                )
+        ],
       ),
     );
   }
